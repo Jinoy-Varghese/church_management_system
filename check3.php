@@ -1,0 +1,109 @@
+<link rel="shortcut icon" type="image/png" href="images/eedge.png"/>
+<link href="fontawesome-free-5.11.2-web/css/all.min.css" rel=stylesheet>
+<?php
+include("session.php");
+   
+    if(isset($_POST['apply']))
+{
+    $b=$_POST["id"];
+
+    
+   
+    
+    $sql="UPDATE logs set status='approved' where num='$b'";   
+    if($conn->query($sql))
+    {
+        echo '<script>alert("Application Approved");';
+        echo 'window.location="insert.php";</script>';
+
+    }
+    
+}
+if(isset($_POST['cancel']))
+{
+    $b=$_POST["id"];
+    $sql="UPDATE logs set status='rejected' where num='$b'";   
+    if($conn->query($sql))
+    {
+        echo '<script>alert("Application Rejected");';
+        echo 'window.location="insert.php";</script>';
+
+    }
+}
+
+
+
+
+
+
+
+
+?>
+<head><title>eParish</title></head>
+<br>
+<h1 align=center>Are You Sure. Do You Want To Continue ?</h1>
+
+<br>
+<br>
+<br>
+<br>
+<h3>
+Certificate Details
+</h3>
+
+
+<?php
+
+$k=$_GET['k'];
+
+$sql="SELECT * FROM logs where num=$k";
+$result=$conn->query($sql);
+$row=$result->fetch_assoc();
+$v=$row["id"];
+
+$sql="SELECT * FROM wedding INNER JOIN family ON wedding.wid=family.num where wedding.id=$v";
+$result=$conn->query($sql);
+$row=$result->fetch_assoc();
+echo "Bride Name: ".$row["bride"]."<BR>";
+echo "Groom Name: ".$row["groom"]."<BR>";
+echo "Family Name: ".$row["family"]."<BR>";
+echo "Family Head: ".$row["owner"]."<BR>";
+echo "Phone Number: ".$row["phno"]."<BR>";
+echo "Father's Name: ".$row["so"]."<BR>";
+echo "Date: ".$row["date"]."<BR>";
+
+
+?>
+<BR><BR><BR><BR>
+<form method=post action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >
+<input type=hidden name=id value=<?php echo $k; ?>>
+
+
+<button class=apply name=apply><i class="far fa-check-circle"></i> Approve</button>
+<button class=cancel name=cancel><i class="far fa-times-circle"></i> Reject</button>
+</form>
+<style>
+
+.apply 
+{
+
+    border:none;
+    background:#29a329;
+    color:white;
+    width:10vw;
+    height:6vh;
+    font-size:18px;
+    margin-left:36vw;
+}
+.cancel
+{
+    border:none;
+    color:white;
+    background:#ff1a1a;
+    width:10vw;
+    height:6vh;
+    font-size:18px;
+    margin-left:100px;
+}
+
+</style>
